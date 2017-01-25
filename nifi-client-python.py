@@ -342,7 +342,15 @@ def decommission( url, token, nodeAddress ):
 			return
 	print "Node " + nodeAddress + " successfully decommissioned"
 	return
-	
+
+
+
+def removeNode( url, token, nodeAddress ):
+	nodeId = getNodeId(url, token, nodeAddress)
+	endpoint = _endpoint_node + nodeId
+	response = execRequest(url + endpoint, token, "DELETE")
+	print "Deleted node " + nodeAddress + " (" + nodeId + ")"
+
 
 
 
@@ -352,7 +360,7 @@ def decommission( url, token, nodeAddress ):
 
 possibleActions = ["list-processors", "list-connections", "list-input-processors", "stop-input-processors",
 						"start-input-processors", "status", "bulletins", "cluster", "node", "disconnect",
-						"connect", "decommission"]
+						"connect", "decommission", "remove"]
 
 parser = argparse.ArgumentParser(description='Python client to call NiFi REST API.')
 
@@ -403,6 +411,8 @@ elif( action == "connect" ):
 	connect(url, token, node)
 elif( action == "decommission" ):
 	decommission(url, token, node)
+elif( action == "remove" ):
+	removeNode(url, token, node)
 else:
 	print "ERROR, unknown action " + action
 	

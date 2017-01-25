@@ -14,7 +14,7 @@ Due to problems with the ``requests`` Python module when making requests over SS
 $ python nifi-client-python.py -h
 usage: nifi-client-python.py [-h] [--login LOGIN] [--password PASSWORD]
                              [--debug] --url URL --action
-                             {list-processors,list-connections,list-input-processors,stop-input-processors,start-input-processors,status,bulletins,cluster,node,disconnect,connect,decommission}
+                             {list-processors,list-connections,list-input-processors,stop-input-processors,start-input-processors,status,bulletins,cluster,node,disconnect,connect,decommission,remove}
                              [--node NODE]
 
 Python client to call NiFi REST API.
@@ -122,6 +122,13 @@ The objective of this command is to disconnect a node, stop the input processors
 ```shell
 python nifi-client-python.py --url http://localhost:8080/nifi-api --action decommission --node node-1
 python nifi-client-python.py --url https://localhost:9443/nifi-api --login test --password test --action decommission --node node-1
+```
+
+### Remove
+This will remove the given node from the cluster. The node needs to be disconnected first.
+```shell
+python nifi-client-python.py --url http://localhost:8080/nifi-api --action remove --node node-1
+python nifi-client-python.py --url https://localhost:9443/nifi-api --login test --password test --action remove --node node-1
 ```
 
 ## Contributions
