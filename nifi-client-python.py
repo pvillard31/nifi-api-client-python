@@ -358,7 +358,7 @@ parser = argparse.ArgumentParser(description='Python client to call NiFi REST AP
 
 parser.add_argument('--login', help='Login to use if NiFi is secured')
 parser.add_argument('--password', help='Password to use if NiFi is secured')
-parser.add_argument('--debug', help='Password to use if NiFi is secured', action='store_true')
+parser.add_argument('--debug', help='Enables debug mode', action='store_true')
 
 requiredNamed = parser.add_argument_group('Required arguments')
 requiredNamed.add_argument('--url', help='NiFi API endpoint, Ex: http://localhost:8080/nifi-api', required=True)
