@@ -12,9 +12,10 @@ Due to problems with the ``requests`` Python module when making requests over SS
 
 ```shell
 $ python nifi-client-python.py -h
-usage: nifi-client-python.py [-h] [--login LOGIN] [--password PASSWORD] --url
-                             URL --action
-                             {list-processors,list-connections,list-input-processors,stop-input-processors,start-input-processors,status,bulletins}
+usage: nifi-client-python.py [-h] [--login LOGIN] [--password PASSWORD]
+                             [--debug] --url URL --action
+                             {list-processors,list-connections,list-input-processors,stop-input-processors,start-input-processors,status,bulletins,cluster,node,disconnect,connect,decommission}
+                             [--node NODE]
 
 Python client to call NiFi REST API.
 
@@ -22,12 +23,18 @@ optional arguments:
   -h, --help            show this help message and exit
   --login LOGIN         Login to use if NiFi is secured
   --password PASSWORD   Password to use if NiFi is secured
+  --debug               Enables debug mode
 
 Required arguments:
   --url URL             NiFi API endpoint, Ex: http://localhost:8080/nifi-api
-  --action {list-processors,list-connections,list-input-processors,stop-input-processors,start-input-processors,status,bulletins}
+  --action {list-processors,list-connections,list-input-processors,stop-input-processors,start-input-processors,status,bulletins,cluster,node,disconnect,connect,decommission}
                         Action to execute
+
+Arguments for node related actions:
+  --node NODE           Node address to use for the action
 ```
+
+If debug mode is enabled with ``--debug``, the commands sent to NiFi will be displayed as well as received responses.
 
 ## Actions
 ### List processors
@@ -77,6 +84,44 @@ This will list the bulletins that can be retrieved in the bulletins board though
 ```shell
 python nifi-client-python.py --url http://localhost:8080/nifi-api --action bulletins
 python nifi-client-python.py --url https://localhost:9443/nifi-api --login test --password test --action bulletins
+```
+
+### Cluster
+This will display a summary status of the NiFi cluster.
+```shell
+$ python nifi-client-python.py --url http://localhost:8080/nifi-api --action cluster
+$ python nifi-client-python.py --url https://localhost:9443/nifi-api --login test --password test --action cluster
+d403e2c0-44a7-4c1c-aaa4-fed2ee3d6993	node-1	CONNECTED	3,777 / 0 bytes
+59f7d393-8676-4d40-bf0f-df353c761cdf	node-2	CONNECTED	13,000 / 900.68 KB
+26233020-b9ea-41c5-a58a-86026cfac8e4	node-3	CONNECTED	0 / 0 bytes
+```
+
+### Node
+This will display a JSON representing the status of the given node.
+```shell
+python nifi-client-python.py --url http://localhost:8080/nifi-api --action node --node node-1
+python nifi-client-python.py --url https://localhost:9443/nifi-api --login test --password test --action node --node node-1
+```
+
+### Disconnect
+This will disconnect the given node from the cluster.
+```shell
+python nifi-client-python.py --url http://localhost:8080/nifi-api --action disconnect --node node-1
+python nifi-client-python.py --url https://localhost:9443/nifi-api --login test --password test --action disconnect --node node-1
+```
+
+### Connect
+This will connect the given node to the cluster.
+```shell
+python nifi-client-python.py --url http://localhost:8080/nifi-api --action connect --node node-1
+python nifi-client-python.py --url https://localhost:9443/nifi-api --login test --password test --action connect --node node-1
+```
+
+### Decommission
+The objective of this command is to disconnect a node, stop the input processors on the disconnected node alone (see above) and wait long enough to have all the queued flow files processed by this node. Once done, this would typically followed by a NiFi shutdown for administration tasks (upgrade, configuration change, custom NAR deployment, etc). If the number of queued flow files is unchanged longer than 60 seconds, the command will stop with a warning message.
+```shell
+python nifi-client-python.py --url http://localhost:8080/nifi-api --action decommission --node node-1
+python nifi-client-python.py --url https://localhost:9443/nifi-api --login test --password test --action decommission --node node-1
 ```
 
 ## Contributions
