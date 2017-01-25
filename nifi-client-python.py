@@ -272,7 +272,7 @@ def getNodeId( url, token, nodeAddress ):
 
 
 def showNode( url, token, nodeAddress ):
-	response = execRequest(url + _endpoint_node + getNodeId(url, nodeAddress), token, "GET")
+	response = execRequest(url + _endpoint_node + getNodeId(url, token, nodeAddress), token, "GET")
 	jData = json.loads(response)
 	print jData
 	return jData
