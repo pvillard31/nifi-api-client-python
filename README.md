@@ -1,3 +1,6 @@
+# THIS IS DEPRECATED AND YOU SHOULD DEFINITELY USE https://github.com/Chaffelson/nipyapi
+
+
 # nifi-api-client-python
 
 **Work in progress, but this can be used**
